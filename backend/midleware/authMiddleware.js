@@ -3,7 +3,7 @@ const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 
 
-const protectedRoute = asyncHandler(async(req, res, next)=>{
+const protectedRoute = asyncHandler(async(req, res, next)=> {
     try{
         const token = req.cookies.token
         if(!token){
