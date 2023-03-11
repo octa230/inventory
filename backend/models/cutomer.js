@@ -5,9 +5,12 @@ const customerSchema = new mongoose.Schema({
     name: {type: String, required: true},
     company: {type: String, required: true},
     taxNumber: {type: String, required: true},
-    createdAt:{type: Date, default: Date.now}
+    createdAt:{type: Date, default: Date.now},
 },
 {
     timestamps: true, 
 }
 )
+
+const Customer = mongoose.model('Customer', customerSchema)
+export default Customer
