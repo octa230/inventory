@@ -5,9 +5,9 @@ const bodyParser = require('body-parser')
 const asyncHandler = require('express-async-handler')
 const cors = require('cors');
 const ErrorHandler = require('./midleware/errHandler')
-const cookieParser = require('cookie-parser')
-
-const userRouter = require('./routes/userRoute')
+const cookieParser = require('cookie-parser');
+const userRouter = require('./routes/userRouter')
+const productRouter = require('./routes/productRouter');
 
 const app = express();
 dotenv.config()
@@ -24,8 +24,8 @@ app.use(bodyParser.json())
 
 //routes middleware
 
-app.use('/api/users/', userRouter)
-
+app.use('/api/product', productRouter)
+app.use('/api/user', userRouter)
 
 
 //routes
