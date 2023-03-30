@@ -7,47 +7,29 @@ import { toast } from 'react-toastify'
 
 export default function AddSale(){
 
-    let data = []
     const [selectedOptions, setSelectedOptions]= useState()
     const [createModelOpen, setCreateModelOpen] = useState(false)
-    const [tableData, setTableData] = useState(()=> data)
+    const [options, setOptions] = useState([])
     const [validationErrors, setValidationErrors ] = useState({})
     //const [data, setData] = useState([])
 
-    function handleCreateNewRow(values){
-        tableData.push(values)
-        setTableData([...tableData])
-    }
-    function handlesaveRowEdit({exitEditingMode, row, values}){
-        if(!Object.keys(validationErrors).length){
-            tableData[row.index] = values;
-            setTableData([...tableData])
-            exitEditingMode()
+   
+  
+
+
+    useEffect(()=> {
+        const getProducts = async()=> {
+        options = await Axios.length('/api/product/list')
+        setOptions(options.data)
         }
-
-    }
-
-    function handleCancelRowEdit(){
-        setValidationErrors({})
-    }
-
-   useEffect(()=> {
-    const getProducts = async()=> {
-        try{
-         data = await Axios.get('/api/product/list')
-        } catch(err){
-            toast.error(err)
-        }
-    }
-    getProducts()
-   }, [])
+        getProducts()
+    }, []) 
    
     //value label
 
-    const optionList = [data]
-    function handleSelection(data){
-        setSelectedOptions(data)
-    }
+     function handleSelection(tableData){
+        setSelectedOptions(tableData)
+    } 
 
   return (
         <Form className='m-auto pb-3'>
@@ -57,7 +39,7 @@ export default function AddSale(){
 
             <Form.Group className='mt-2'>
             <Select
-            options={optionList}
+            options={Object.keys(options)}
             placeholder={'Select Product'}
             value={selectedOptions}
             onChange={handleSelection}

@@ -27,8 +27,8 @@ export default function AddProduct() {
     })
 
     const [name, setName]= useState('');
-    const [price, setPrice] = useState('')
-    const [inStock, setInStock] = useState('')
+    const [price, setPrice] = useState()
+    const [inStock, setInStock] = useState()
 
     
 

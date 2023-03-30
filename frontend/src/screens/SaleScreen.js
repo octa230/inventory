@@ -3,6 +3,7 @@ import {Container, Row, Col, ButtonGroup, Button} from 'react-bootstrap'
 import AddProduct from '../components/AddProduct'
 import AddSale from '../components/AddSale'
 import {useNavigate} from 'react-router-dom'
+import TableComponent from '../components/Table'
 
 
 
@@ -24,13 +25,14 @@ export default function SaleScreen() {
           </ButtonGroup>
           </div>
         </Col>
-        <Col sm='12' md='6' className='border'>
+        <Col sm='12' md='6' className='border mx-md-4'>
           <h2>Record</h2>
           <AddProduct />
-          <AddSale />
+          
         </Col>
-        <Col sm='12' md='4' className='border'>
-          <h2>Sales</h2>
+        <Col sm='12' md='' className='border'>
+          <h2>Add Sale</h2>
+          <TableComponent /> 
           
         </Col>
       </Row>

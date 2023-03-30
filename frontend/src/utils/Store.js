@@ -6,6 +6,7 @@ const initialState = {
     userInfoToken: localStorage.getItem('userInfoToken')
     ? JSON.parse(localStorage.getItem('userInfoToken'))
     : null
+
 }
 
 
@@ -15,6 +16,7 @@ function reducer(state, action){
             return {...state, userInfoToken: action.payload}
         case 'SIGN_OUT':
             return { ...state, userInfoToken: null }
+
         default:
             return state;   
     }
@@ -23,5 +25,5 @@ function reducer(state, action){
 export function StoreProvider(props){
     const [state, dispatch] = useReducer(reducer, initialState)
     const value = { state, dispatch};
-    return <StoreProvider value={value}>{props.children}</StoreProvider>
+    return <Store.Provider value={value}>{props.children}</Store.Provider>
 }
