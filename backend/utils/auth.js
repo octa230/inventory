@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken')
 
-const token = (user)=>{
+exports.token = (user)=>{
     return jwt.sign({
         id: user._id,
         userName: user.userName,
-        password: user.password
+        password: user.password,
+        email: user.email
         },
         process.env.JWT_SECRET,
         {
@@ -13,7 +14,7 @@ const token = (user)=>{
         )
 }
 
-const isAuth = (req, res, next)=>{
+exports.isAuth = (req, res, next)=>{
     const authorization = req.headers.authorization;
     if(authorization){
         const token = authorization.slice(7, authorization.length)
@@ -30,4 +31,3 @@ const isAuth = (req, res, next)=>{
     }
 }
 
-module.exports ={token, isAuth}

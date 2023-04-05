@@ -1,87 +1,129 @@
-import React, {useState, useReducer} from 'react'
+import React, {useState, useReducer, useEffect} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
 import { Button, Form } from 'react-bootstrap'
-import Axios from 'axios'
+import axios from 'axios'
+import { productReducer } from '../utils/Store'
 import {toast} from 'react-toastify'
 import {getError} from '../utils/getError'
 
 
 
-function reducer(state, action){
-    switch(action.type){
-        case 'ADD_PRODUCT':
-            return{...state, loading: true, data: action.payload}
-        case 'ADD_FAIL':
-            return{...state, loading: false, error: action.payload}
-        case 'ADD_SUCCESS':
-            return{...state, loading: false}
-        default:
-            return state
+const reducer = (state, action) => {
+    switch (action.type) {
+      case 'UPDATE_REQUEST':
+        return { ...state, loadingUpdate: true };
+      case 'UPDATE_SUCCESS':
+        return { ...state, loadingUpdate: false };
+      case 'UPDATE_FAIL':
+        return { ...state, loadingUpdate: false };
+      case 'P_CREATE_REQUEST':
+          return { ...state, loadingCreate: true };
+      case 'P_CREATE_SUCCESS':
+          return { ...state, loadingCreate: false };
+      case 'P_CREATE_FAIL':
+          return { ...state, loadingCreate: false };
+
+      default:
+        return state;
     }
-} 
+  };
 
 export default function AddProduct() {
 
-    const[{loading, error}, dispatch] = useReducer(reducer,{
-        loading: false,
-        error: ''
-    })
+    const navigate = useNavigate();
+    const params = useParams(); // /product/:id
+    const { id: productId } = params;
 
+    const [{ loading, error, loadingUpdate, loadingCreate}, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      loadingCreate: true,
+      error: '',
+    });
+
+  
     const [name, setName]= useState('');
-    const [price, setPrice] = useState()
-    const [inStock, setInStock] = useState()
+    const [code, setProductCode] = useState()
+    const [price, setPrice] = useState('')
+    const [inStock, setInStock] = useState('')
+
+
+
+/*     useEffect(()=> {
+        const fetchData = async()=> {
+            try{
+                dispatch({type: 'FETCH_REQUEST'})
+                const {data} = await axios.get(`/api/product/`)
+            }catch(err){
+              toast.error()
+            }
+        } 
+    }) */
 
     
 
-    const createHandler = async(e)=> {
-        e.preventDefault()
+    const createHandler = async()=> {
         try{
-            dispatch({type: 'ADD_PRODUCT'})
-            const {data} =  await Axios.post('/api/product/new-product', {
+            dispatch({type: 'P_CREATE_REQUEST'})
+            const {data} =  await axios.post('/api/product/new',{
                 name,
-                price, 
+                code,
+                price,
                 inStock
             })
             toast.success('product added successfully');
-            dispatch({type: 'ADD_SUCCESS'})
+            dispatch({type: 'P_CREATE_SUCCESS'})
             
         }catch(error){
             toast.error(getError(error))
-            dispatch({type: 'ADD_FAIL'})
+            dispatch({type: 'P_CREATE_FAIL'})
         }
     }
 
 
   return (
-        <Form className='m-auto' onSubmit={createHandler}>
+        <Form className='m-auto'>
             <Form.Text>
                 <h1>Add New Product</h1>
             </Form.Text>
+
+            <Form.Group controlId='code'>
+                <Form.Label>Code</Form.Label>
+                <Form.Control 
+                value={code}
+                onChange={(e)=>setProductCode(e.target.value)} 
+                required
+                />
+            </Form.Group>
+
             <Form.Group controlId='name'>
                 <Form.Label>Add Name</Form.Label>
                 <Form.Control 
                 value={name}
                 onChange={(e)=>setName(e.target.value)} 
-                required ={true}
+                required
                 />
-
             </Form.Group>
+
             <Form.Group controlId='price'>
                 <Form.Label>Add Price</Form.Label>
                 <Form.Control 
                 onChange={(e)=>setPrice(e.target.value)} 
                 value={price}
-                required ={true}
+                required
                 />
             </Form.Group>  
+
             <Form.Group controlId='inStock'>
                 <Form.Label>Add Stock</Form.Label>
                 <Form.Control 
                 onChange={(e)=>setInStock(e.target.value)} 
                 value={inStock}
-                required ={true}
+                required
                 />
             </Form.Group> 
-            <Button variant='success' type='submit' className='my-4 w-100'>
+
+            <Button onClick={createHandler} variant='success' type='submit' className='my-4 w-100'>
                 Done
             </Button>
         </Form>

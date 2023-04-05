@@ -1,9 +1,12 @@
-import mongoose from "mongoose"
+const mongoose = require('mongoose')
 
 const saleSchema = new mongoose.Schema({
 
 saleItems:[
-    {
+    {   
+
+        
+        code: {type: String, required: true},
         name: {type: String, required: true},
         quantity:{type: Number, required: true},
         price:{type: Number, required: true},
@@ -12,6 +15,8 @@ saleItems:[
 ],
     isPaid: {type: Boolean, default: true},
     paidAt: {type: Date },
+    soldBy:{type: mongoose.Schema.ObjectId, ref: 'User', required: true},
+    taxPrice:{type: Number, required: true},
     totalPrice: {type: Number, required: true },
 
 

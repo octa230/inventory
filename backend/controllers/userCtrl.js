@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const {token} = require('../utils/auth')
 const asyncHandler = require('express-async-handler')
 
@@ -8,9 +8,11 @@ const asyncHandler = require('express-async-handler')
 //create user
 
 const createUser = asyncHandler(async(req, res)=> {
+//const saltRounds = 10;
 const newUser = new User({
     userName: req.body.name,
-    password: bcrypt.hashSync(req.body.password)
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password, saltRounds = 10)
 })
 
 const user = await newUser.save();
@@ -22,15 +24,22 @@ token(user)
 //login
 
 const loginUser = asyncHandler(async(req, res)=> {
-    const user = User.findOne({userName: req.body.userName})
+
+    const {password, userName} = req.body;
+    const user = await User.findOne({userName})
+    const hashPassword = bcrypt.compareSync(password, user.password)
+
     if(user){
-        if(bcrypt.compareSync(req.body.password, user.password)){
-            res.send({userName: user.userName, token: token(user)})
-            return
+        if(hashPassword){
+            res.send({
+                userId: user._id,
+                email: user.email,
+                userName: user.userName
+            })
         }
-        res.status(404).send({message: 'incorrect username or password'})
     }
 })
+
 
 
 module.exports = { createUser, loginUser }
