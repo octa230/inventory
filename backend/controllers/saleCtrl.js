@@ -11,12 +11,12 @@ const getSales = asyncHandler(async(req, res)=> {
 })
 
 const makeSale = asyncHandler(async(req, res)=> {
-    const newSale = await new Sale({
-        saleItems: req.body.saleItems.map((x)=> ({...x, product: x._id})),
-        isPaid: req.body.isPaid,
+    const newSale = new Sale({
+        saleItems: req.body.saleItems.map((x)=> ({...x, product: x._id, quantity: x.quantity})),
         taxPrice: req.body.taxPrice,
+        itemsPrice: req.body.itemsPrice,
         totalPrice: req.body.totalPrice,
-        soldBy: req.user._id
+        //soldBy: req.user._id
     })
 
     const sale = await newSale.save();

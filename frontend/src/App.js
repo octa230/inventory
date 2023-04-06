@@ -7,13 +7,12 @@ import ProductEdit from "./screens/ProductEdit";
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import ProtectedRoute from "./components/ProtectedRoutes";
 
 
 function App() {
   return (
     <BrowserRouter>
-    <Navbar bg="success" expand='lg' variant="dark"> 
+    <Navbar bg="success" expand='lg' variant="dark" > 
       <Container>
       <div>
       <Navbar.Brand href="/">Home</Navbar.Brand>
@@ -21,10 +20,11 @@ function App() {
         <Navbar.Toggle aria-controls="nav-bar-basic"/>
         <Navbar.Collapse id="nav-bar-basic">
         <div>
-        <Nav className="me-auto">
+        <Nav className="m-auto">
           <Nav.Link href="/sales">Dashboard</Nav.Link>
           <Nav.Link href="/inventory">Inventory</Nav.Link>
           <Nav.Link href="/register">New User</Nav.Link>
+          <Nav.Link href="/">History</Nav.Link>
         </Nav>
         </div>
       </Navbar.Collapse>

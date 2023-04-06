@@ -6,14 +6,15 @@ const initialState = {
     userInfoToken: localStorage.getItem('userInfoToken')
     ? JSON.parse(localStorage.getItem('userInfoToken'))
     : null,
+    
     sale:{
         saleItems: localStorage.getItem('saleItems')
         ?JSON.parse(localStorage.getItem('saleItems'))
-        :{},
-    isPaid: localStorage.getItem('isPaid')
+        :[],
+/*     isPaid: localStorage.getItem('isPaid')
         ? JSON.parse(localStorage.getItem('isPaid'))
         : {},
-    soldBy: localStorage.getItem('soldBy')
+    soldBy: localStorage.getItem('soldBy') */
     }
 
 }
@@ -25,10 +26,12 @@ function reducer(state, action){
             return {...state, userInfoToken: action.payload}
         case 'SIGN_OUT':
             return { ...state, userInfoToken: null }
+            
         case 'ADD_SALE_ITEM':
-            const newItem = action.payload
-            const existItem = state.sale.saleItems.find((item)=> item._id === newItem._id)
-            const saleItems = existItem ? state.sale.saleItems.map((item)=> item._id === existItem._id 
+            const newItem = action.payload;
+            const existItem = state.sale.saleItems.find((item)=> item._id === newItem._id);
+            const saleItems = existItem ? state.sale.saleItems.map(
+            (item)=> item._id === existItem._id 
             ? newItem : item)
             : [...state.sale.saleItems, newItem]
             localStorage.setItem('saleItems', JSON.stringify(saleItems))
@@ -37,7 +40,7 @@ function reducer(state, action){
         case 'REMOVE_SALE_ITEM':{
             const saleItems = state.sale.saleItems.filter((item)=> item._id !== action.payload._id)
             localStorage.setItem('saleItems', JSON.stringify(saleItems))
-            return{...state, cart: {...state.sale, saleItems}}
+            return{...state, sale: {...state.sale, saleItems}}
         }
 
         case 'CLEAR_SALE_ITEMS':

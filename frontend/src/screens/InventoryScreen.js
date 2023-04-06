@@ -3,7 +3,6 @@ import Axios from 'axios'
 import { Button, Container, Table } from 'react-bootstrap'
 import {BsFillPencilFill, BsCheck2Circle, BsXCircle, BsPlusSquareFill} from 'react-icons/bs'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import { toast } from 'react-toastify'
 import { getError } from '../utils/getError'
 import { Store } from '../utils/Store'
@@ -42,7 +41,10 @@ const reducer = (state, action)=> {
 }
 
 
-export default function InventoryScreen() {
+export default function InventoryScreen(props) {
+
+
+    const {product} = props
 
     const {state, dispatch: ctxDispatch} = useContext(Store)
     const {sale: {saleItems} } =  state
@@ -87,7 +89,7 @@ export default function InventoryScreen() {
     if(window.confirm('Are you sure?')){
         dispatch({type: 'DELETE_REQUEST'})
         try{
-            await axios.delete(`/api/product/delete/${product._id}`,)
+            await Axios.delete(`/api/product/delete/${product._id}`,)
             toast.success('product deleted')
             dispatch({type: 'DELETE_SUCCESS'})
         }catch(err){
@@ -98,11 +100,11 @@ export default function InventoryScreen() {
 
   }
 
-  const addSaleProduct = async(item, product)=> {
+  const addSaleProduct = async(item)=> {
     toast.success('unit added to sale')
-    const existItem =  saleItems.find((x)=> x._id === product._id)
+    const existItem =  saleItems.find((x)=> x._id === item._id)
     const quantity = existItem ? existItem.quantity + 1 : 1
-    const {data} = await axios.get(`/api/product/${item._id}`)
+    const {data} = await Axios.get(`/api/product/${item._id}`)
 
     if(data.inStock < quantity){
         window.alert('product outsold')
@@ -184,7 +186,7 @@ export default function InventoryScreen() {
                             type='Number'
                             value={product.price}
                             onChange={(e)=> setPrice(e.target.value)}
-                            />
+                            ></input>
 
                         </td>
                         <td className='d-flex justify-content-end'>
