@@ -10,17 +10,16 @@ export default function RegisterUser() {
 
     const navigate = useNavigate()
 
-    const [userName, setUserName ]= useState('');
+    const [name, setName ]= useState('');
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setComfirmPassword] = useState('')
 
     const {state, dispatch: ctxDispatch} = useContext(Store);
-    const {userToken} = state;
+    const {userInfoToken} = state;
 
-    async  function submitHandler(e){
+    async function submitHandler(e){
         e.preventDefault()
-
         if(password !== confirmPassword){
             toast.error('passwords don \'t match')
             return
@@ -28,12 +27,13 @@ export default function RegisterUser() {
 
         try{
             const {data} = await Axios.post('/api/user/register', {
-                userName,
+                name,
                 email,
                 password,
             })
             ctxDispatch({type: 'SIGN_IN', payload: data})
             localStorage.setItem('userInfoToken', JSON.stringify(data))
+            toast.success('Account added successfully')
             navigate(redirect || '/sales')
         }catch(err){
             toast.error(getError(err))
@@ -45,36 +45,32 @@ export default function RegisterUser() {
          <Form.Group controlId='email'>
             <Form.Label>email</Form.Label>
             <Form.Control 
-            type='input'
-            value={email}
+            type='email'
             required
             onChange={(e)=> setEmail(e.target.value)}
             />
         </Form.Group>
             
-        <Form.Group controlId='username'>
+        <Form.Group controlId='userName'>
             <Form.Label>username</Form.Label>
             <Form.Control 
-            type='input'
-            value={userName}
+            type='name'   
             required
-            onChange={(e)=> setUserName(e.target.value)}
+            onChange={(e)=> setName(e.target.value)}
             />
         </Form.Group>
         <Form.Group controlId='password'>
             <Form.Label>Password</Form.Label>
             <Form.Control 
-            type='input'
-            value={password}
+            type='password'  
             required
             onChange={(e)=> setPassword(e.target.value)}
             />
         </Form.Group>
-        <Form.Group controlId='confirm-password'>
+        <Form.Group controlId='confirmPassword'>
             <Form.Label>Confirm Password</Form.Label>
             <Form.Control 
-            type='input'
-            value={confirmPassword}
+            type='password'
             required
             onChange={(e)=> setComfirmPassword(e.target.value)}
             />

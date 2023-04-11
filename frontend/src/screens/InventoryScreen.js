@@ -82,7 +82,7 @@ export default function InventoryScreen(props) {
     } else{
         getProducts() 
     }
-  }, [page, products, successDelete])
+  }, [page, successDelete])
 
 
   async function deleteHandler(product){
@@ -155,9 +155,9 @@ export default function InventoryScreen(props) {
         </thead>
         <tbody>
             {
-                products.map((product)=>(
-                    <tr key={product._id} product={product}>
-                        <td>{product._id.slice(0, 8)}</td>
+                products?.map((product)=> (
+                    <tr key={product._id}>
+                        <td>{product._id.slice(0, 8)}...</td>
                         <td>
                             <input
                             value={product.code}
@@ -186,7 +186,7 @@ export default function InventoryScreen(props) {
                             type='Number'
                             value={product.price}
                             onChange={(e)=> setPrice(e.target.value)}
-                            ></input>
+                            />
 
                         </td>
                         <td className='d-flex justify-content-end'>

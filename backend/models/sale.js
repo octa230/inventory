@@ -13,9 +13,11 @@ saleItems:[
 
     paidAt: {type: Date },
     itemsPrice: {type: Number, required: true},
-    //soldBy:{type: mongoose.Schema.ObjectId, ref: 'User', required: true},
+    soldBy:{type: String, required: true},
+    InvoiceCode: {type: String, required: true},
     taxPrice:{type: Number, required: true},
     totalPrice: {type: Number, required: true },
+    
 },
 
 {

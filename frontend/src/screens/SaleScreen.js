@@ -28,7 +28,13 @@ function reducer(state, action){
   }
 }
 
+
+
+
 export default function SaleScreen() {
+
+
+  
 
   const [ {loading}, dispatch ] = useReducer(reducer, {
     loading: false,
@@ -92,6 +98,9 @@ export default function SaleScreen() {
     }
   }
 
+
+
+
   return (
     <Container>
       <Row>
@@ -112,7 +121,7 @@ export default function SaleScreen() {
         <span className='p-2' onClick={()=> deleteAllItems()}>clear all units {' '} <BsTrash3Fill/></span>
         </div>
           <ListGroup>
-            {saleItems.map((item)=> (
+            {saleItems?.map((item)=> (
               <ListGroup.Item key={item._id}>
                 <Row className='align-items-center'>
                   <Col md={4}>
