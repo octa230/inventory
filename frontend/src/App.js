@@ -9,6 +9,7 @@ import SalesHistory from "./screens/SalesHistory";
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import { Nav, Navbar } from "react-bootstrap";
+import RetailScreen from "./screens/RetailScreen";
 import {BsBoxArrowRight} from 'react-icons/bs'
 import { useContext } from "react";
 import { Store } from "./utils/Store";
@@ -35,6 +36,7 @@ function App() {
           <Nav.Link href="/inventory">Inventory</Nav.Link>
           <Nav.Link href="/register">New User</Nav.Link>
           <Nav.Link href="/sales">History</Nav.Link>
+          <Nav.Link href="/retail">Retail</Nav.Link>
         </Nav>
         
         <div className="d-flex align-items-end">
@@ -68,6 +70,11 @@ function App() {
       <Route path="/api/product/update/:id" element={
         <ProtectedRoute>
           <ProductEdit />
+        </ProtectedRoute>
+      }/>
+      <Route path="/retail" element={
+        <ProtectedRoute>
+          <RetailScreen />
         </ProtectedRoute>
       }/>
       <Route path="/sales" element={

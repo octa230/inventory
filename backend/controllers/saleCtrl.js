@@ -5,7 +5,7 @@ const easyInvoice = require('easyinvoice')
 const PDFDocument = require('pdfkit')
 const fs = require('fs')
 const User = require ( '../models/user');
-const payOrderEmailTemplate = require('../utils/mail');
+
 
 
 const getSales = asyncHandler(async(req, res)=> {

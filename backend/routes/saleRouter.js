@@ -4,7 +4,8 @@ const {getSales,
     getSingleSale, 
     salesSummary, 
     deleteSale,
-    makeInvoice} = require('../controllers/saleCtrl')
+    makeInvoice,
+} = require('../controllers/saleCtrl')
 
 
 
