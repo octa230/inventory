@@ -1,7 +1,5 @@
 const asyncHandler = require ( 'express-async-handler');
-const express = require ( 'express');
 const Sale = require ( '../models/sale');
-const easyInvoice = require('easyinvoice')
 const PDFDocument = require('pdfkit')
 const fs = require('fs')
 const User = require ( '../models/user');
@@ -20,7 +18,7 @@ const makeSale = asyncHandler(async(req, res)=> {
         taxPrice: req.body.taxPrice,
         itemsPrice: req.body.itemsPrice,
         totalPrice: req.body.totalPrice,
-        InvoiceCode: "UPDXB_" + Math.floor(100000 + Math.random()* 900000),
+        InvoiceCode: "UPDXB_RTL" + Math.floor(100000 + Math.random()* 900000),
         soldBy: 'Desk 1'
         //soldBy: req.user._id
     })

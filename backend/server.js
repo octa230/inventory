@@ -9,7 +9,8 @@ const cookieParser = require('cookie-parser');
 const userRouter = require('./routes/userRouter')
 const productRouter = require('./routes/productRouter');
 const salesRouter = require('./routes/saleRouter');
-const retailRouter = require('./routes/retailRouter')
+const retailRouter = require('./routes/retailRouter');
+const { multipleSaleRoutes } = require('./routes/multipleSaleRouter');
 
 const app = express();
 dotenv.config()
@@ -30,6 +31,7 @@ app.use('/api/product', productRouter)
 app.use('/api/user', userRouter)
 app.use('/api/sales', salesRouter)
 app.use('/api/retail', retailRouter)
+app.use('/api/retail/multiple/', multipleSaleRoutes)
 
 
 //routes

@@ -63,7 +63,7 @@ export default function SaleScreen() {
   sale.taxPrice = RoundTo(0.15 * sale.itemsPrice)
   sale.totalPrice = sale.itemsPrice + sale.taxPrice;
 
-  const makeSale = async()=>{
+  const makeSale = async()=> {
     try{
       dispatch({type: 'CREATE_SALE_REQUEST'})
       const {data} = await axios.post('/api/sales/make-sale', {

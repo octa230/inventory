@@ -1,17 +1,22 @@
-const Retail = require("../models/retail")
+const Retail = require("../models/Retail")
 const asyncHandler = require('express-async-handler')
 
 
 const NewRetailSale = asyncHandler(async(req, res)=> {
     const newSale = new Retail({
             InvoiceCode: "UPDXB/RTL_" + Math.floor(100000 + Math.random()* 900000),
-            name: req.body.name,   
+            saleItems: req.body.saleItems.map((x)=> ({
+                ...x, 
+                product: x.id, 
+                productName: x.productName, 
+                quantity: x.quantity, 
+                price: x.price, 
+                subtotal: x.subtotal, 
+                arrangement: x.arrangement
+            })),
             paidBy: req.body.paidBy, 
             service: req.body.service,
-            arrangement: req.body.arrangement,
             preparedBy: req.body.preparedBy,
-            productName: req.body.productName, 
-            price: req.body.price, 
             vat: req.body.vat,
             total: req.body.total
     })

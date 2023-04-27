@@ -11,11 +11,15 @@ const initialState = {
         saleItems: localStorage.getItem('saleItems')
         ?JSON.parse(localStorage.getItem('saleItems'))
         :[],
+        retailSaleItems: localStorage.getItem('retailSaleItems')
+        ?JSON.parse(localStorage.getItem('retailSaleItems'))
+        :[]
 /*     isPaid: localStorage.getItem('isPaid')
         ? JSON.parse(localStorage.getItem('isPaid'))
         : {},
     soldBy: localStorage.getItem('soldBy') */
     }
+
 
 }
 

@@ -51,7 +51,7 @@ export default function SalesHistory() {
         const fetchData = async()=> {
             dispatch({type: 'FETCH_REQUEST'});
             try{
-                const {data} = await axios.get('/api/sales/list')
+                const {data} = await axios.get('/api/sales/list') 
                 dispatch({type: 'FETCH_SUCCESS', payload: data})
             
             }catch(error){
@@ -63,7 +63,7 @@ export default function SalesHistory() {
 
     //generate invoice function
 
-    const generateInvoice = async()=> {
+    const generateInvoice = async(sale)=> {
         try{
             dispatch({type: 'INVOICE_REQUEST'})
             const {data} = await axios.post(`/api/sales/make-invoice/${sale._id}`)

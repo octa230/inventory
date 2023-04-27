@@ -13,6 +13,7 @@ import RetailScreen from "./screens/RetailScreen";
 import {BsBoxArrowRight} from 'react-icons/bs'
 import { useContext } from "react";
 import { Store } from "./utils/Store";
+import MultipleSaleHistory from "./screens/MultipleSaleHistory";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Nav.Link href="/register">New User</Nav.Link>
           <Nav.Link href="/sales">History</Nav.Link>
           <Nav.Link href="/retail">Retail</Nav.Link>
+          <Nav.Link href="/multiple-sale">Multiple Sale</Nav.Link>
         </Nav>
         
         <div className="d-flex align-items-end">
@@ -80,6 +82,11 @@ function App() {
       <Route path="/sales" element={
         <ProtectedRoute>
           <SalesHistory/>
+        </ProtectedRoute>
+      }/>
+      <Route path="/multiple-sale" element={
+        <ProtectedRoute>
+          <MultipleSaleHistory/>
         </ProtectedRoute>
       }/>
     </Routes>
