@@ -4,19 +4,21 @@ const asyncHandler = require('express-async-handler')
 
 const newMultipleSale = asyncHandler(async(req, res)=> {
     const newSale = new MultipleSale({
-        saleItems: req.body.rows.map((x)=> ({
+        saleItems: req.body.products.map((x)=> ({
             ...x,
-            product: x.id,
             quantity: x.quantity,
-            productName: x.productName,
+            productName: x.name,
             price: x.price,
             arrangement: x.arrangement
         })),
         preparedBy: req.body.preparedBy,
         paidBy: req.body.paidBy,
         service: req.body.service,
+        date: req.body.time,
+        name: req.body.name,
+        subTotal: req.body.subTotal,
         total: req.body.total,
-        InvoiceCode: "UPDXB_RTLM" + Math.floor(100000 + Math.random()* 900000),
+        InvoiceCode: req.body.invoiceNumber,
     })
 
     const sale = await newSale.save()

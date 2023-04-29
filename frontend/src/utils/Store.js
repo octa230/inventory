@@ -1,4 +1,5 @@
 import { createContext, useReducer } from "react";
+import easyinvoice from 'easyinvoice'
 
 export const Store = createContext()
 
@@ -11,13 +12,8 @@ const initialState = {
         saleItems: localStorage.getItem('saleItems')
         ?JSON.parse(localStorage.getItem('saleItems'))
         :[],
-        retailSaleItems: localStorage.getItem('retailSaleItems')
-        ?JSON.parse(localStorage.getItem('retailSaleItems'))
-        :[]
-/*     isPaid: localStorage.getItem('isPaid')
-        ? JSON.parse(localStorage.getItem('isPaid'))
-        : {},
-    soldBy: localStorage.getItem('soldBy') */
+        multipleSaleItems: localStorage.getItem('multipleSale')
+
     }
 
 
@@ -29,8 +25,7 @@ function reducer(state, action){
         case 'SIGN_IN':
             return {...state, userInfoToken: action.payload}
         case 'SIGN_OUT':
-            return { ...state, userInfoToken: null }
-            
+            return { ...state, userInfoToken: null }      
         case 'ADD_SALE_ITEM':
             const newItem = action.payload;
             const existItem = state.sale.saleItems.find((item)=> item._id === newItem._id);

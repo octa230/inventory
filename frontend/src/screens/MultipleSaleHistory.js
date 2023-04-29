@@ -81,7 +81,7 @@ export default function MultipleSaleHistory() {
                                   arrangement:  {item.arrangement}
                                 </ListGroup.Item>
                                 <ListGroup.Item>
-                                  subtotal:  {item.subTotal}
+                                  subtotal:  {sale.subTotal}
                                 </ListGroup.Item>
                             </ListGroup>
                         </Card.Body>
@@ -94,7 +94,7 @@ export default function MultipleSaleHistory() {
                 <Col>Service: {sale.service}</Col>
                 <Col>Date: {sale.createdAt.substring(0, 10)}</Col>
                 <Col>
-                <Button className='mt-2' onClick={generateInvoice}>make invoice</Button>
+                <Button className='mt-2'>{sale? 'sucess': 'unsuccessfull'}</Button>
                 </Col>
             </Row>
         ))}

@@ -1,12 +1,12 @@
 import React, {useContext, useReducer} from 'react'
 import {Container, Row, Col, ListGroup, Button, Card,} from 'react-bootstrap'
 import AddProduct from '../components/AddProduct'
-import TableComponent from '../components/Table'
 import { Store } from '../utils/Store'
 import { getError } from '../utils/getError'
 import {BsDashSquareFill, BsFillPlusSquareFill, BsXSquareFill, BsTrash3Fill} from 'react-icons/bs'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import ProductTable from '../components/TestTable'
 
 function reducer(state, action){
   switch(action.type){
@@ -59,7 +59,7 @@ export default function SaleScreen() {
   }
 
   const RoundTo = (num)=> Math.round(num * 100 + Number.EPSILON) / 100 //====> 123.4567 - 123.45;
-  sale.itemsPrice = RoundTo(sale.saleItems.reduce((a, c)=> a+ c.quantity * c.price, 0))
+  sale.itemsPrice = RoundTo(sale.saleItems.reduce((acc, curr)=> acc + curr.quantity * curr.price, 0))
   sale.taxPrice = RoundTo(0.15 * sale.itemsPrice)
   sale.totalPrice = sale.itemsPrice + sale.taxPrice;
 
@@ -71,7 +71,6 @@ export default function SaleScreen() {
         taxPrice: sale.taxPrice,
         itemsPrice: sale.itemsPrice,
         totalPrice: sale.totalPrice,
-        //soldBy: sale.soldBy
       },
       {
         headers:{Authorization: `Bearer${userInfoToken.token}`}
@@ -106,7 +105,7 @@ export default function SaleScreen() {
       <Row>
       <Col sm='12' md='12' className='border'>
           <h2>Add Sale</h2>
-          <TableComponent /> 
+        <ProductTable />
           
         </Col>
       </Row>

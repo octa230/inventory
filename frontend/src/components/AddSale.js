@@ -11,8 +11,6 @@ export default function AddSale(){
     const [createModelOpen, setCreateModelOpen] = useState(false)
     const [options, setOptions] = useState([])
     const [validationErrors, setValidationErrors ] = useState({})
-    //const [data, setData] = useState([])
-
    
   
 
@@ -25,8 +23,6 @@ export default function AddSale(){
         getProducts()
     }, []) 
    
-    //value label
-
      function handleSelection(tableData){
         setSelectedOptions(tableData)
     } 

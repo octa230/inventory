@@ -36,9 +36,8 @@ function App() {
           <Nav.Link href="/dashboard">Dashboard</Nav.Link>
           <Nav.Link href="/inventory">Inventory</Nav.Link>
           <Nav.Link href="/register">New User</Nav.Link>
-          <Nav.Link href="/sales">History</Nav.Link>
-          <Nav.Link href="/retail">Retail</Nav.Link>
-          <Nav.Link href="/multiple-sale">Multiple Sale</Nav.Link>
+          <Nav.Link href="/sales">Sold units</Nav.Link>
+          <Nav.Link href="/sale-history-sale">Sale History</Nav.Link>
         </Nav>
         
         <div className="d-flex align-items-end">
@@ -84,7 +83,7 @@ function App() {
           <SalesHistory/>
         </ProtectedRoute>
       }/>
-      <Route path="/multiple-sale" element={
+      <Route path="/sale-history-sale" element={
         <ProtectedRoute>
           <MultipleSaleHistory/>
         </ProtectedRoute>
