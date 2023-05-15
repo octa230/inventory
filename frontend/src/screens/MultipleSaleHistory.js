@@ -5,6 +5,7 @@ import axios from 'axios'
 import { getError } from '../utils/getError'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router'
+import { Link } from 'react-router-dom'
 
 
 function reducer(state, action){
@@ -41,7 +42,7 @@ export default function MultipleSaleHistory() {
         const fetchData =async()=> {
             dispatch({type: 'FETCH_REQUEST'});
             try{
-                const {data} = await axios.get('/api/retail/multiple/list')
+                const {data} = await axios.get('/api/multiple/list')
                 dispatch({type: 'FETCH_SUCCESS', payload: data})
             }catch(error){
                 dispatch({type: 'FETCH_FAIL', payload: error})
@@ -54,7 +55,7 @@ export default function MultipleSaleHistory() {
     const generateInvoice = async(sale)=> {
         try{
             dispatch({type: 'INVOICE_REQUEST'})
-            const {data} = await axios.post(`/api/retail/multiple/make-invoice/${sale._id}`)
+            const {data} = await axios.post(`/api/multiple/make-invoice/${sale._id}`)
             dispatch({type: 'INVOICE_SUCCESS'})
         } catch(error){
             dispatch({type: 'INVOICE_FAIL'})
@@ -67,7 +68,7 @@ export default function MultipleSaleHistory() {
             <Row key={sale._id} className='d-flex justify-content-between align-items-center'>
                 <Col className='p-3'>
                     {sale.saleItems.map((item)=>(
-                        <Card md={6} sm={8} key={item.id}>
+                        <Card md={6} sm={8} key={item._id}>
                         <Card.Title className='align-self-center'>{item.productName}</Card.Title>
                         <Card.Body>
                             <ListGroup>
@@ -88,7 +89,8 @@ export default function MultipleSaleHistory() {
                         </Card>
                     ))}
                 </Col>
-                <Col>Invoice Code: {sale.InvoiceCode}</Col>
+                <Col>Invoice Code: <Link to={`/edit-sale/${sale._id}`}>{sale.InvoiceCode}</Link>
+                </Col>
                 <Col>prepapredBy: {sale.preparedBy}</Col>
                 <Col>PaidBy: {sale.paidBy}</Col>
                 <Col>Service: {sale.service}</Col>

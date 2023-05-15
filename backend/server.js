@@ -8,8 +8,6 @@ const ErrorHandler = require('./midleware/errHandler')
 const cookieParser = require('cookie-parser');
 const userRouter = require('./routes/userRouter')
 const productRouter = require('./routes/productRouter');
-const salesRouter = require('./routes/saleRouter');
-const retailRouter = require('./routes/retailRouter');
 const { multipleSaleRoutes } = require('./routes/multipleSaleRouter');
 
 const app = express();
@@ -26,12 +24,9 @@ app.use(bodyParser.json())
 
 
 //routes middleware
-
 app.use('/api/product', productRouter)
 app.use('/api/user', userRouter)
-app.use('/api/sales', salesRouter)
-app.use('/api/retail', retailRouter)
-app.use('/api/retail/multiple/', multipleSaleRoutes)
+app.use('/api/multiple', multipleSaleRoutes)
 
 
 //routes
@@ -44,8 +39,6 @@ app.get('/', asyncHandler(async(req, res)=> {
 app.use(ErrorHandler)
 
 
-
-
 mongoose.connect(process.env.MONGO_URI)
 .then(()=> {
 
@@ -53,5 +46,5 @@ mongoose.connect(process.env.MONGO_URI)
             console.log(`app running on ${PORT}`)
         })
     
-    }).catch((err)=> console.log(err))
+}).catch((err)=> console.log(err))
 

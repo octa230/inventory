@@ -146,7 +146,7 @@ export default function InventoryScreen(props) {
                 <th>Price</th>
                 <th className='d-flex justify-content-between'>Actions
                     <span>
-                        <Button href='/sales' variant=''>
+                        <Button href='/dashboard' variant=''>
                            Add product <BsPlusSquareFill/>
                         </Button>
                     </span>

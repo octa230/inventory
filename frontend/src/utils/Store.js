@@ -1,5 +1,4 @@
 import { createContext, useReducer } from "react";
-import easyinvoice from 'easyinvoice'
 
 export const Store = createContext()
 

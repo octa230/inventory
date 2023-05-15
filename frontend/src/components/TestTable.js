@@ -3,6 +3,7 @@ import { Table, Form, Button } from 'react-bootstrap';
 import axios from 'axios'
 import {getError} from '../utils/getError'
 import easyinvoice from 'easyinvoice'
+import Dropzone from 'react-dropzone'
 import {toast} from 'react-toastify'
 import {BsBoxArrowDown, BsPlusSquare} from 'react-icons/bs'
 
@@ -21,12 +22,12 @@ function ProductTable() {
   const [name, setCustomerName] = useState('')
   const [phone, setPhoneNumber] = useState('')
   const [preparedBy, setPreparedBy]= useState('')
-  const [showInvoice, setShowInvoice] = useState(false)
   const [vat, setVat] = useState(0);
+  const [file, setFile] = useState("")
 
 
   const handleAddRow=()=> {
-    setProducts([...products, {name:"", price: 0, quantity: 0, arrangement:""}]);
+    setProducts([...products, {name:"", price: 0, quantity: 0, arrangement:"", file:""}]);
   }
 
   function handleSelectedValue(setState){
@@ -52,7 +53,13 @@ function ProductTable() {
     newProducts[index].quantity = parseInt(event.target.value, 10) || 0;
     setProducts(newProducts);
   };
-
+  
+  const handleFileChange=(event, index)=> {
+    const newProducts = [...products];
+    newProducts[index].file = event.target.value
+    setFile(newProducts)
+    console.log(newProducts)
+  }
   const calculateSubtotal = () => {
     return products.reduce((accumulator, product) => accumulator + (product.price * product.quantity), 0);
   };
@@ -62,69 +69,6 @@ function ProductTable() {
     const total = subtotal + (subtotal * vat / 100);
     return total.toFixed(2);
   };
-
-
-/*   function handleSave(){
-    const data ={
-        products,
-        vat, preparedBy, 
-        paidBy,service,
-        subtotal: calculateSubtotal(),
-        total: calculateTotal()
-    }
-    const invoiceContent = generateInvoiceData(data)
-    const invoiceWindow = window.open('', '_blank');
-    invoiceWindow.document.write(invoiceContent)
-    invoiceWindow.document.close()
-    setShowInvoice(true)
-  }
-    const generateInvoiceData=(data)=> {
-    const {products, vat, subtotal, total, preparedBy, service, paidBy} = data;
-
-    let invoiceContent = `
-    <!DOCTYPE html>
-    <h1>Invoice</h1>
-    <h2>Products</h2>
-    <h3>prepared By:${preparedBy}</h3>
-    <h3>service By:${service}</h3>
-    <h3>PaidBy:${paidBy}</h3>
-    <table>
-    <thead>
-    <tr>
-    <th>Product</th>
-    <th>Price</th>
-    <th>Quantity</th>
-    <th>Arrangement</th>
-    <th>Subtotal</th>
-    </tr>
-    </thead>
-    <tbody>
-    `;
-
-    products.forEach((product)=> {
-        const {name, price, quantity, arrangement}= product
-        const productSubtotal = price * quantity
-
-        invoiceContent +=`
-        <tr>
-        <td>${name}</td>
-        <td>${price}</td>
-        <td>${quantity}</td>
-        <td>${arrangement}</td>
-        <td>${productSubtotal}</td>
-        </tr>
-        `
-    })
-    invoiceContent += `
-    </tbody>
-    </table>
-    <p>subTotal: ${subtotal}</p>
-    <p>vat: ${vat}%</p>
-    <p>Total: ${total}</p>
-    `
-    return invoiceContent;
-  } */
-
 
 async function handleSave(){
 
@@ -147,7 +91,7 @@ const data ={
             address: phone,
         },
         information: {
-            number: "UPDXB_RTLM" + Math.floor(100000 + Math.random()* 900000),
+            number: "UPDXB_" + Math.floor(100000 + Math.random()* 900000),
             date: time
         },
         products: products.map((product)=> ({
@@ -169,7 +113,7 @@ const data ={
         "margin-top": 50,
         "margin-right": 50,
         "margin-left": 50,
-        "margin-bottom":25
+        "margin-bottom":5
         }
     } 
 
@@ -177,14 +121,15 @@ const data ={
         const invoiceNumber = data.information.number
         const subTotal = calculateSubtotal()
         const total = calculateTotal()
-        const {result} = await axios.post('/api/retail/multiple/new-sale', {
+
+        const {result} = await axios.post('/api/multiple/new-sale', {
           products, paidBy, service,
           name, phone, preparedBy, total,
-          time, invoiceNumber, subTotal
+          time, invoiceNumber, subTotal,
         },
         console.log(products, paidBy, service,
           name, phone, preparedBy, subTotal,
-          vat, invoiceNumber, total,
+          vat, invoiceNumber, total, file
         ))
       }catch(error){
         toast.error(getError(error))
@@ -218,7 +163,7 @@ const data ={
     <Form.Label>Service</Form.Label>
     <Form.Select onChange={handleSelectedValue(setService)}>
       <option>Select...</option>
-      <option>Delivey</option>
+      <option>Delivery</option>
       <option>Store Pick Up</option>
       <option>website</option>
       <option>insta-shop</option>
@@ -266,6 +211,7 @@ const data ={
             <th>Arrangement</th>
             <th>Price</th>
             <th>Quantity</th>
+            <th>Photo</th>
             <th>Subtotal</th>
           </tr>
         </thead>
@@ -301,6 +247,15 @@ const data ={
                   type="number"
                   value={product.quantity || ''}
                   onChange={(event) => handleQuantityChange(index, event)}
+                />
+              </td>
+              <td>
+                <Form.Control
+                type='file'
+                name='photo'
+                accept='image/*'
+                multiple
+                onChange={(event)=> handleFileChange(event, index)}
                 />
               </td>
               <td>{product.price && product.quantity ? product.price * product.quantity : 0}</td>

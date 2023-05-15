@@ -13,6 +13,7 @@ import RetailScreen from "./screens/RetailScreen";
 import {BsBoxArrowRight} from 'react-icons/bs'
 import { useContext } from "react";
 import { Store } from "./utils/Store";
+import EditSaleDetails from "./screens/EditSaleDetails";
 import MultipleSaleHistory from "./screens/MultipleSaleHistory";
 
 
@@ -88,6 +89,12 @@ function App() {
           <MultipleSaleHistory/>
         </ProtectedRoute>
       }/>
+      <Route path="/edit-sale/:id" element={
+        <ProtectedRoute>
+          <EditSaleDetails />
+        </ProtectedRoute>
+      }
+      />
     </Routes>
     </BrowserRouter>
   );

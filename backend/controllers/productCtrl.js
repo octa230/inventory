@@ -70,8 +70,10 @@ if(product){
 })
 
 
+
 const getProduct = asyncHandler(async(req, res)=> {
-const product = await Product.find(req.params.id)
+const productId = req.params.id
+const product = await Product.findById(productId)
 if(product){
     res.send(product)
 }else{
