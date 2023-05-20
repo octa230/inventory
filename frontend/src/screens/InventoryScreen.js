@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useReducer, useContext } from 'react'
+import React, { useEffect, useState, useReducer, useContext} from 'react'
 import Axios from 'axios'
-import { Button, Container, Table } from 'react-bootstrap'
-import {BsFillPencilFill, BsCheck2Circle, BsXCircle, BsPlusSquareFill} from 'react-icons/bs'
+import { Button, Container, Table, Form } from 'react-bootstrap'
+import {BsFillPencilFill, BsCheck2Circle, BsXCircle, BsPlusSquareFill, BsFillFileBreakFill} from 'react-icons/bs'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { getError } from '../utils/getError'
@@ -41,10 +41,8 @@ const reducer = (state, action)=> {
 }
 
 
-export default function InventoryScreen(props) {
+export default function InventoryScreen() {
 
-
-    const {product} = props
 
     const {state, dispatch: ctxDispatch} = useContext(Store)
     const {sale: {saleItems} } =  state
@@ -63,7 +61,8 @@ export default function InventoryScreen(props) {
   const [code, setCode]= useState('')
   const [name, setName] = useState('')
   const [price, setPrice] = useState()
-  const [inStock, setInStock] = useState()
+  const [inStock, setInStock] = useState(0)
+  const [searchName, setSearchName] = useState('')
 
 
 
@@ -74,7 +73,9 @@ export default function InventoryScreen(props) {
        try{    
         const {data}  = await Axios.get(`/api/product/list?page=${page}`)
         dispatch({type: 'FETCH_SUCCESS', payload: data})
-       } catch(err){}
+       } catch(error){
+        toast.error(getError(error))
+       }
     
     }
     if(successDelete){
@@ -100,6 +101,12 @@ export default function InventoryScreen(props) {
 
   }
 
+  function handleSearch(event){
+    setSearchName(event.target.value)
+  }
+
+  const filteredProducts = products.filter((x)=> x.name.toLowerCase().includes(searchName.toLocaleLowerCase()))
+
   const addSaleProduct = async(item)=> {
     toast.success('unit added to sale')
     const existItem =  saleItems.find((x)=> x._id === item._id)
@@ -113,41 +120,34 @@ export default function InventoryScreen(props) {
     ctxDispatch({type: 'ADD_SALE_ITEM', payload: {...item, quantity}})
   }
 
-/*  async function submitHandler(e, product){
-    e.preventDefault()
-    try{
-        dispatch({type: 'UPDATE_REQUEST'})
-        await axios.put(`/api/product/update/${product._id}`,{
-            code,
-            name,
-            inStock,
-            price
-        })
-        dispatch({type: 'UPDATE_SUCCESS'})
-        toast.success('Product updated successfully')
-    }catch(err){
-        toast.error(getError(err))
-        dispatch({type: 'UPDATE_FAIL'})
-    }
-  }
- */
-  
-
 
   return (
    <Container fluid>
-     <Table striped bordered hover className='my-2 w-100'>
+    <div>
+        <Form.Control className='p-2 my-2 w-100'
+            type="text"
+            placeholder = "search..."
+            value={searchName}
+            onChange={handleSearch}
+        />
+    <Table striped bordered hover className='my-2 w-100'>
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Code</th>
                 <th>Name</th>
-                <th>Stock</th>
                 <th>Price</th>
-                <th className='d-flex justify-content-between'>Actions
+                <th>Stock</th>
+                <th className='d-flex justify-content-between'>
+                    Actions
                     <span>
                         <Button href='/dashboard' variant=''>
                            Add product <BsPlusSquareFill/>
+                        </Button>
+                    </span>
+                    <span>
+                        <Button variant='' onClick={()=> navigate('/print-inventory')}>
+                            Print <BsFillFileBreakFill />
                         </Button>
                     </span>
                 </th>
@@ -155,12 +155,12 @@ export default function InventoryScreen(props) {
         </thead>
         <tbody>
             {
-                products?.map((product)=> (
+                filteredProducts?.map((product)=> (
                     <tr key={product._id}>
                         <td>{product._id.slice(0, 8)}...</td>
                         <td>
                             <input
-                            value={product.code}
+                            value={product.code || code}
                             type='text'
                             onChange={(e)=> setCode(e.target.value)}
                             />
@@ -168,7 +168,7 @@ export default function InventoryScreen(props) {
                         </td>
                         <td>
                             <input 
-                            value={product.name}
+                            value={product.name || name}
                             type='text'
                             onChange={(e)=> setName(e.target.value)}
                             />
@@ -176,16 +176,16 @@ export default function InventoryScreen(props) {
                         <td>
                             <input 
                             type='Number'
-                            value={product.inStock}
-                            onChange={(e)=> setInStock(e.target.value)}
+                            value={product.price || price}
+                            onChange={(e)=> setPrice(e.target.value)}
                             />
 
                         </td>
                         <td>
                             <input 
                             type='Number'
-                            value={product.price}
-                            onChange={(e)=> setPrice(e.target.value)}
+                            value={product.inStock || inStock}
+                            onChange={(e)=> setInStock(e.target.value)}
                             />
 
                         </td>
@@ -206,10 +206,12 @@ export default function InventoryScreen(props) {
             }
         </tbody>      
     </Table>
+    </div>
+
     <div>
         {[...Array(pages).keys()].map((x)=>(
             <Link key={x+ 1} 
-            to={`/api/product/list?page${x + 1}`}
+            to={`/api/product/list?page=${x + 1}`}
             className={x + 1 === Number(page) ? 'btn text-bold': 'btn'}
             >
             {x + 1}

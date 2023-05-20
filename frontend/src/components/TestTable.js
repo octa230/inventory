@@ -3,9 +3,8 @@ import { Table, Form, Button } from 'react-bootstrap';
 import axios from 'axios'
 import {getError} from '../utils/getError'
 import easyinvoice from 'easyinvoice'
-import Dropzone from 'react-dropzone'
 import {toast} from 'react-toastify'
-import {BsBoxArrowDown, BsPlusSquare} from 'react-icons/bs'
+import {BsBoxArrowDown, BsPlusSquare, BsCameraFill} from 'react-icons/bs'
 
 
 
@@ -24,10 +23,11 @@ function ProductTable() {
   const [preparedBy, setPreparedBy]= useState('')
   const [vat, setVat] = useState(0);
   const [file, setFile] = useState("")
+  const [source, setSource] = useState("")
 
 
   const handleAddRow=()=> {
-    setProducts([...products, {name:"", price: 0, quantity: 0, arrangement:"", file:""}]);
+    setProducts([...products, {name:"", price: 0, quantity: 0, arrangement:"", file:"", phone: ""}]);
   }
 
   function handleSelectedValue(setState){
@@ -64,6 +64,16 @@ function ProductTable() {
     return products.reduce((accumulator, product) => accumulator + (product.price * product.quantity), 0);
   };
 
+  const handelCapture =(target)=> {
+    if(target.files){
+      if(target.files.target !== 0){
+        const file = target.files[0]
+        const newUrl = URL.createObjectURL(file)
+        setSource(newUrl)
+      }
+    }
+  }
+
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
     const total = subtotal + (subtotal * vat / 100);
@@ -88,7 +98,7 @@ const data ={
 
         client:{
             company: name,
-            address: phone,
+            address: phone
         },
         information: {
             number: "UPDXB_" + Math.floor(100000 + Math.random()* 900000),
@@ -99,15 +109,16 @@ const data ={
             description: product.arrangement,
             "tax-rate": 5,
             price: product.price,
-            /* subtotal: calculateSubtotal(),
-            total: calculateTotal() */
 
         })),
         'vat':vat, preparedBy, 
         paidBy,service,
         subtotal: calculateSubtotal(),
         total: calculateTotal(),  
-        'bottom-notice': `Welcome to our Floral Paradise <a href='https://www.instagram.com/upliftingdxb/'>instagram</a>`,
+        'bottom-notice': `
+        Welcome to our Floral Paradise <a href='https://www.instagram.com/upliftingdxb/'>instagram</a>
+        Facebook <a href='https://www.instagram.com/upliftingdxb/'>Facebook</a>
+        Site <a href='https://uplifting.ae'>Website</a>`,
         "settings":{
         "currency": 'AED',
         "margin-top": 50,
@@ -250,6 +261,7 @@ const data ={
                 />
               </td>
               <td>
+                <div className='d-flex'>
                 <Form.Control
                 type='file'
                 name='photo'
@@ -257,6 +269,18 @@ const data ={
                 multiple
                 onChange={(event)=> handleFileChange(event, index)}
                 />
+                  <span className='mx-2'>
+                  <Button
+                  accept='image/*'
+                  type='file'
+                  capture="enviroment"
+                  onChange={(e)=> handelCapture(e.target)}
+                  >
+                    <BsCameraFill/>
+                  </Button>
+                </span>
+                </div>
+             
               </td>
               <td>{product.price && product.quantity ? product.price * product.quantity : 0}</td>
             </tr>

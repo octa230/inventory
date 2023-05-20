@@ -43,24 +43,11 @@ export default function AddProduct() {
 
   
     const [name, setName]= useState('');
-    const [code, setProductCode] = useState()
+    const [code, setProductCode] = useState('')
     const [price, setPrice] = useState('')
     const [inStock, setInStock] = useState('')
 
 
-
-/*     useEffect(()=> {
-        const fetchData = async()=> {
-            try{
-                dispatch({type: 'FETCH_REQUEST'})
-                const {data} = await axios.get(`/api/product/`)
-            }catch(err){
-              toast.error()
-            }
-        } 
-    }) */
-
-    
 
     const createHandler = async()=> {
         try{

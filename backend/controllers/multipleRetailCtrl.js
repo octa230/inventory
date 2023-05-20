@@ -1,35 +1,7 @@
 const MultipleSale = require('../models/MultipleRetail');
-const asyncHandler = require('express-async-handler')
+const asyncHandler = require('express-async-handler');
+const Product = require('../models/product');
 
-//this function is dependent on the [ addunits] function 
-/* const newMultipleSale = asyncHandler(async(req, res)=> {
-    const newSale = new MultipleSale({
-        saleItems: req.body.products.map((x)=> ({
-            ...x,
-            quantity: x.quantity,
-            productName: x.name,
-            price: x.price,
-            arrangement: x.arrangement,
-        })),
-        preparedBy: req.body.preparedBy,
-        paidBy: req.body.paidBy,
-        service: req.body.service,
-        date: req.body.time,
-        name: req.body.name,
-        subTotal: req.body.subTotal,
-        units: req.body.selectedProducts.map((x)=> ({
-            ...x,
-            product: x.product,
-            quantity: x.quantity
-        })),
-        total: req.body.total,
-        InvoiceCode: req.body.invoiceNumber,
-    })
-
-    await newSale.save()
-})  */
-
-//new sale function
 const makeSale = asyncHandler(async(req, res)=> {
         const newSale = new MultipleSale({
             saleItems: req.body.products.map((x)=> ({
@@ -44,6 +16,7 @@ const makeSale = asyncHandler(async(req, res)=> {
             paidBy: req.body.paidBy,
             service: req.body.service,
             date: req.body.time,
+            phone: req.body.phone,
             name: req.body.name,
             units:[],
             subTotal: req.body.subTotal,
@@ -55,9 +28,24 @@ const makeSale = asyncHandler(async(req, res)=> {
         res.status(201).send({message: 'sale recorded successfully', sale})
 }) 
 
+
+const PAGE_SIZE = 30
+
 const getSales = asyncHandler(async(req, res)=> {
-const sales = await MultipleSale.find();
-res.send(sales)
+    const {query} = req;
+    const page = query.page || 1;
+    const pageSize = query.pageSize || PAGE_SIZE
+
+    const sales = await MultipleSale.find().sort({createdAt: -1})   
+        .skip(pageSize * ( page - 1))
+        .limit(pageSize)
+
+    const countSales = await MultipleSale.countDocuments();
+    res.send({
+        sales, page,
+        countSales,
+        Pages: Math.ceil(countSales / pageSize)
+    })
 })
 
 const getsingleSale = asyncHandler(async(req, res)=> {
@@ -89,4 +77,4 @@ const addSaleUnits = asyncHandler(asyncHandler(async(req, res)=> {
     sale.units.push({arrangement, ...newProducts})
 }))
 
-module.exports = { /* newMultipleSale, */  getSales, getsingleSale, addSaleUnits, makeSale}
+module.exports = {getSales, getsingleSale, addSaleUnits, makeSale}

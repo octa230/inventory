@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useReducer, useContext} from 'react'
 import {useParams} from 'react-router-dom'
 import { Card, Row, Container, Form, Stack, Table, Button } from 'react-bootstrap'
-import {FaPlusCircle} from 'react-icons/fa'
+import {FaPlusCircle, FaRedo} from 'react-icons/fa'
 import axios from 'axios'
 import {toast} from 'react-toastify'
 import {getError} from '../utils/getError'
@@ -133,7 +133,7 @@ console.log(selectedProducts, arrangement)
         <Row>
           <Stack direction='horizontal' gap={3}>
                 <Card className='w-50'>
-                    <Card.Title>code:{' '}{sale.InvoiceCode}</Card.Title>
+                    <Card.Title className='m-2'>code:{' '}{sale.InvoiceCode}</Card.Title>
                     <Form.Control type='text'
                     onChange={(e)=> setArrangement(e.target.value)}
                     name='arrangement'
@@ -175,7 +175,9 @@ console.log(selectedProducts, arrangement)
             </tbody>
           </Table>
           <Button onClick={handleSave}>Record</Button>
-          <Button onClick={handleNewTable}>add table</Button>
+          <Button onClick={handleNewTable}>
+            <FaRedo/>
+          </Button>
           </Stack>
         </Row>  
     </Container>

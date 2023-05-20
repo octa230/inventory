@@ -197,8 +197,7 @@ export default function SaleScreen() {
           </Card.Body>
         </Card>
         </Col>
-      </Row>
-      
+      </Row> 
     </Container>
   )
 }

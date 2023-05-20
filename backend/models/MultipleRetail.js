@@ -26,6 +26,7 @@ const MultipleRetailSchema = new mongoose.Schema({
     date:{type: String, required: true},
     name:{type: String, required: true},
     paidBy: {type: String, required: true},
+    phone: {type: String, required: true},
     preparedBy: {type: String, requred: true},
     service: {type: String, required: true},
     units: [unitSchema],

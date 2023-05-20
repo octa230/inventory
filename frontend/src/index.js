@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { StoreProvider } from './utils/Store';
 import App from './App'
 import './index.css';
-import ProtectedRoute from './components/ProtectedRoutes';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

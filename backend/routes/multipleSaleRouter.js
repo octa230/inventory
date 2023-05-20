@@ -1,4 +1,4 @@
-const {newMultipleSale, getSales, getsingleSale, addSaleUnits, makeSale} = require('../controllers/multipleRetailCtrl');
+const {getSales, getsingleSale, addSaleUnits, makeSale} = require('../controllers/multipleRetailCtrl');
 const express = require('express');
 const { isAuth } = require ('../utils/auth');
 

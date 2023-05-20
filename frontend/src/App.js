@@ -10,11 +10,13 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import { Nav, Navbar } from "react-bootstrap";
 import RetailScreen from "./screens/RetailScreen";
-import {BsBoxArrowRight} from 'react-icons/bs'
+import {BsBoxArrowRight, BsFillDatabaseFill, BsFillClipboard2DataFill, BsFillPersonPlusFill, BsGrid1X2Fill} from 'react-icons/bs'
 import { useContext } from "react";
+import {RiFileList2Fill, RiFolderHistoryFill} from "react-icons/ri"
 import { Store } from "./utils/Store";
 import EditSaleDetails from "./screens/EditSaleDetails";
-import MultipleSaleHistory from "./screens/MultipleSaleHistory";
+import SaleHistoryScreen from "./screens/SaleHistoryScreen"
+import PrintStock from "./screens/PrintStock";
 
 
 function App() {
@@ -29,16 +31,35 @@ function App() {
   }
   return (
   <BrowserRouter>
-  <Navbar bg="success" expand='lg' variant="dark p-3" > 
+  <Navbar expand='lg' bg="dark" variant="dark" color="black" className="p-4" > 
       <Navbar.Brand href="/">Home</Navbar.Brand>
         <Navbar.Toggle aria-controls="nav-bar-basic"/>
         <Navbar.Collapse id="nav-bar-basic">
-        <Nav className="m-auto">
-          <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-          <Nav.Link href="/inventory">Inventory</Nav.Link>
-          <Nav.Link href="/register">New User</Nav.Link>
-          <Nav.Link href="/sales">Sold units</Nav.Link>
-          <Nav.Link href="/sale-history-sale">Sale History</Nav.Link>
+        <Nav className="m-auto justify-content-center fs-5">
+          <Nav.Link href="/dashboard">
+            <span className="p-3 mb-2">
+              <BsGrid1X2Fill/>
+            </span>
+            Dashboard
+          </Nav.Link>
+          <Nav.Link href="/inventory">
+            <span className="p-3">
+              <BsFillDatabaseFill />
+            </span>
+            Inventory
+            </Nav.Link>
+          <Nav.Link href="/register">
+            <span className="p-3 mb-2">
+              <BsFillPersonPlusFill/>
+            </span>
+            New User
+          </Nav.Link>
+          <Nav.Link href="/sale-history-sale">
+            <span className="p-3 mb-2">
+              <BsFillClipboard2DataFill/>
+            </span>
+            History
+          </Nav.Link>
         </Nav>
         
         <div className="d-flex align-items-end">
@@ -86,12 +107,18 @@ function App() {
       }/>
       <Route path="/sale-history-sale" element={
         <ProtectedRoute>
-          <MultipleSaleHistory/>
+          <SaleHistoryScreen/>
         </ProtectedRoute>
       }/>
       <Route path="/edit-sale/:id" element={
         <ProtectedRoute>
           <EditSaleDetails />
+        </ProtectedRoute>
+      }
+      />
+      <Route path="print-inventory" element={
+        <ProtectedRoute>
+          <PrintStock />
         </ProtectedRoute>
       }
       />
