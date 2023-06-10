@@ -8,6 +8,7 @@ const ErrorHandler = require('./midleware/errHandler')
 const cookieParser = require('cookie-parser');
 const userRouter = require('./routes/userRouter')
 const productRouter = require('./routes/productRouter');
+const salesRouter = require('./routes/saleRouter')
 const { multipleSaleRoutes } = require('./routes/multipleSaleRouter');
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(bodyParser.json())
 app.use('/api/product', productRouter)
 app.use('/api/user', userRouter)
 app.use('/api/multiple', multipleSaleRoutes)
+app.use('/api/wholesale', salesRouter)
 
 
 //routes

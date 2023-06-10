@@ -1,8 +1,8 @@
 const asyncHandler = require ( 'express-async-handler');
-const Sale = require ( '../models/sale');
 const PDFDocument = require('pdfkit')
 const fs = require('fs')
 const User = require ( '../models/user');
+const Sale = require('../models/saleModel')
 
 
 
@@ -14,13 +14,24 @@ const getSales = asyncHandler(async(req, res)=> {
 const makeSale = asyncHandler(async(req, res)=> {
     
     const newSale = new Sale({
-        saleItems: req.body.saleItems.map((x)=> ({...x, product: x._id, quantity: x.quantity})),
-        taxPrice: req.body.taxPrice,
-        itemsPrice: req.body.itemsPrice,
+        InvoiceCode: req.body.InvoiceCode,
+        saleItems: req.body.saleItems.map((x)=> ({
+            ...x, 
+            product: x._id,
+            name: x.name,
+            quantity: x.quantity,
+            price: x.price
+
+        })),
         totalPrice: req.body.totalPrice,
-        InvoiceCode: "UPDXB_RTL" + Math.floor(100000 + Math.random()* 900000),
-        soldBy: 'Desk 1'
-        //soldBy: req.user._id
+        preparedBy: req.body.preparedBy,
+        paidBy: req.body.paidBy,
+        service: req.body.service,
+        date: req.body.date,
+        taxPrice: req.body.taxPrice,
+        saleItemsPrice: req.body.totalPrice,
+        phone: req.body.phone,
+        customer: req.body.customer,
     })
 
     const sale = await newSale.save();

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Table, Form, Button } from 'react-bootstrap';
+import { Table, Form, Button, Col, Row, Container } from 'react-bootstrap';
 import axios from 'axios'
 import {getError} from '../utils/getError'
 import easyinvoice from 'easyinvoice'
 import {toast} from 'react-toastify'
-import {BsBoxArrowDown, BsPlusSquare, BsCameraFill} from 'react-icons/bs'
+import {BsBoxArrowDown, BsPlusSquare, BsCameraFill, BsFillTrash3Fill} from 'react-icons/bs'
 
 
 
@@ -21,13 +21,17 @@ function ProductTable() {
   const [name, setCustomerName] = useState('')
   const [phone, setPhoneNumber] = useState('')
   const [preparedBy, setPreparedBy]= useState('')
-  const [vat, setVat] = useState(0);
+  const [vat, setVat] = useState(5);
   const [file, setFile] = useState("")
   const [source, setSource] = useState("")
 
 
   const handleAddRow=()=> {
     setProducts([...products, {name:"", price: 0, quantity: 0, arrangement:"", file:"", phone: ""}]);
+  }
+
+  const handleReset=()=> {
+    setProducts([])
   }
 
   function handleSelectedValue(setState){
@@ -74,6 +78,7 @@ function ProductTable() {
     }
   }
 
+
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
     const total = subtotal + (subtotal * vat / 100);
@@ -116,7 +121,8 @@ const data ={
         subtotal: calculateSubtotal(),
         total: calculateTotal(),  
         'bottom-notice': `
-        Welcome to our Floral Paradise <a href='https://www.instagram.com/upliftingdxb/'>instagram</a>
+        Welcome to our Floral Paradise <br/> 
+        <a href='https://www.instagram.com/upliftingdxb/'>instagram</a>
         Facebook <a href='https://www.instagram.com/upliftingdxb/'>Facebook</a>
         Site <a href='https://uplifting.ae'>Website</a>`,
         "settings":{
@@ -154,12 +160,9 @@ const data ={
 
 
   return (
-    <div>
-    <div className='d-flex justify-content-between my-2'>
-    <Button variant='' onClick={handleAddRow}  className='mx-2 w-12 p-2 justify-items-center'>
-      <BsPlusSquare/><span className='mx-2'>Add</span>
-    </Button>
-    <div>
+    <Container fluid>
+    <Row className='d-flex justify-content-between my-2'>
+    <Col sm={2}>
     <Form.Label>Paid By</Form.Label>
     <Form.Select onChange={handleSelectedValue(setPaidBy)}>
       <option>Select...</option>
@@ -168,11 +171,11 @@ const data ={
       <option>TapLink</option>
       <option>Bank Transfer</option>
     </Form.Select>
-    </div>
+    </Col>
 
-    <div>
+    <Col sm={2}>
     <Form.Label>Service</Form.Label>
-    <Form.Select onChange={handleSelectedValue(setService)}>
+    <Form.Select onChange={handleSelectedValue(setService)} required>
       <option>Select...</option>
       <option>Delivery</option>
       <option>Store Pick Up</option>
@@ -181,17 +184,17 @@ const data ={
       <option>Delivero</option>
       <option>Careem</option>
     </Form.Select>
-    </div>
-    <div>
+    </Col>
+    <Col sm={2}>
     <Form.Label>prepared By</Form.Label>
-    <Form.Select onChange={handleSelectedValue(setPreparedBy)}>
+    <Form.Select onChange={handleSelectedValue(setPreparedBy)} required>
       <option>choose..</option>
       <option>Lynn</option>
       <option>Allan</option>
       <option>Joe</option>
     </Form.Select>
-    </div>
-    <div className=''>
+    </Col>
+    <Col className='' sm={2}>
       <Form.Label>Customer Name:</Form.Label>
       <Form.Control
       type='text'
@@ -199,22 +202,18 @@ const data ={
       placeholder='customer name'
       onChange={handleSelectedValue(setCustomerName)}
       />
-    </div>
-    <div>
+    </Col>
+    <Col sm={2}>
       <Form.Label>Customer Tel:</Form.Label>
     <Form.Control
+      required
       type='text'
       name='telephone'
       placeholder='customer number'
       onChange={handleSelectedValue(setPhoneNumber)}
       />
-    </div>
-    <div>
-    </div>
-    <Button variant='' onClick={handleSave} className='mx-2 w-12 p-2'>
-      <BsBoxArrowDown/><span className='mx-2'>save</span>
-    </Button>
-    </div>
+    </Col>
+    </Row>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -231,6 +230,7 @@ const data ={
             <tr key={index}>
               <td>
                 <Form.Control
+                  required
                   type="text"
                   name="name"
                   value={product.name || ''}
@@ -239,6 +239,7 @@ const data ={
               </td>
               <td>
                 <Form.Control
+                  required
                   type="text"
                   name="arrangement"
                   value={product.arrangement || ''}
@@ -247,6 +248,7 @@ const data ={
               </td>
               <td>
                 <Form.Control
+                  required
                   type="number"
                   name="price"
                   value={product.price || ''}
@@ -255,6 +257,7 @@ const data ={
               </td>
               <td>
                 <Form.Control
+                  required
                   type="number"
                   value={product.quantity || ''}
                   onChange={(event) => handleQuantityChange(index, event)}
@@ -287,6 +290,23 @@ const data ={
           ))}
         </tbody>
       </Table>
+      <Row className='d-flex justify-content-between my-3'>
+      <Col md={4}>
+      <Button variant='dark' onClick={handleAddRow} className='m-2'>
+      <BsPlusSquare/><span className='mx-2'>Add</span>
+    </Button>
+      </Col>
+      <Col md={4}>
+      <Button variant='dark' onClick={handleSave} className='m-2'>
+      <BsBoxArrowDown/><span className='mx-2'>save</span>
+    </Button>
+      </Col>
+      <Col md={4}>
+      <Button variant='dark' onClick={handleReset} className='m-2'>
+      <BsFillTrash3Fill/><span className='mx-2'>Reset</span>
+      </Button>
+      </Col>
+    </Row>
       <Form.Group>
         <Form.Label>VAT (%)</Form.Label>
         <Form.Control
@@ -297,7 +317,7 @@ const data ={
       </Form.Group>
       <p>Subtotal: {calculateSubtotal()}</p>
       <p>Total: {calculateTotal()}</p>
-    </div>
+    </Container>
   );
 }
 

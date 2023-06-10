@@ -35,13 +35,14 @@ const deleteProduct = asyncHandler(async(req, res)=> {
 //list All Products
 const PageSize = 50
 const getAll = asyncHandler(async(req, res)=> {
+    
     const {query} = req
     const page = query.page || 1;
     const Page_Size = query.Page_Size || PageSize
 
     const products = await Product.find()
-    .skip(PageSize * (page - 1))
-    .limit(PageSize);
+        .skip(PageSize * (page - 1))
+        .limit(PageSize);
 
     const countProducts = await Product.countDocuments();
     res.send({

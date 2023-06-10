@@ -63,6 +63,7 @@ export default function InventoryScreen() {
   const [price, setPrice] = useState()
   const [inStock, setInStock] = useState(0)
   const [searchName, setSearchName] = useState('')
+  const [searchPrice, setSearchPrice ] = useState(0)
 
 
 
@@ -103,9 +104,11 @@ export default function InventoryScreen() {
 
   function handleSearch(event){
     setSearchName(event.target.value)
+   // setSearchPrice(event.target.value)
   }
 
   const filteredProducts = products.filter((x)=> x.name.toLowerCase().includes(searchName.toLocaleLowerCase()))
+  //const filteredPrice = products.filter((x)=> x.price)
 
   const addSaleProduct = async(item)=> {
     toast.success('unit added to sale')
