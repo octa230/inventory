@@ -123,7 +123,7 @@ export default function ProductEdit() {
             required
             />
         </Form.Group>
-    <Button type='submit'>Update</Button>
+    <Button type='submit' className='mt-2'>Update</Button>
     </Form>
  </Container>
   )

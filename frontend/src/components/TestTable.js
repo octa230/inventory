@@ -13,7 +13,6 @@ import {BsBoxArrowDown, BsPlusSquare, BsCameraFill, BsFillTrash3Fill} from 'reac
 
 function ProductTable() {
 
-  const date = Date.now();
   const time = new Date().toLocaleDateString('en-GB');
   const [products, setProducts] = useState([]);
   const [paidBy,  setPaidBy]= useState('')
@@ -22,12 +21,12 @@ function ProductTable() {
   const [phone, setPhoneNumber] = useState('')
   const [preparedBy, setPreparedBy]= useState('')
   const [vat, setVat] = useState(5);
-  const [file, setFile] = useState("")
+  const [file, setFile] = useState('')
   const [source, setSource] = useState("")
 
 
   const handleAddRow=()=> {
-    setProducts([...products, {name:"", price: 0, quantity: 0, arrangement:"", file:"", phone: ""}]);
+    setProducts([...products, {name:"", price: 0, quantity: 0, arrangement:"", file:""}]);
   }
 
   const handleReset=()=> {
@@ -37,6 +36,7 @@ function ProductTable() {
   function handleSelectedValue(setState){
     return function(e){
       const selectedValue = e.target.value
+
       setState(selectedValue)
     }
   }
@@ -57,6 +57,7 @@ function ProductTable() {
     newProducts[index].quantity = parseInt(event.target.value, 10) || 0;
     setProducts(newProducts);
   };
+
   
   const handleFileChange=(event, index)=> {
     const newProducts = [...products];
@@ -85,8 +86,21 @@ function ProductTable() {
     return total.toFixed(2);
   };
 
-async function handleSave(){
+async function handleSave(e){
+e.preventDefault()
 
+const selectFields =[name, phone, service, paidBy, preparedBy];
+const submitProducts = [...products]
+const hasEmptyValues = selectFields.some((value)=> value === '')
+const hasNullValues = submitProducts.some(row => Object.values(row).some(value => value === ''))
+if(hasEmptyValues ){
+  toast.error('Check Sale Fields for empty data')
+  return
+}
+if(hasNullValues){
+  toast.error('check Table Data for empty values')
+  return
+}
 
 const data ={
 
@@ -142,18 +156,18 @@ const data ={
         const {result} = await axios.post('/api/multiple/new-sale', {
           products, paidBy, service,
           name, phone, preparedBy, total,
-          time, invoiceNumber, subTotal,
+          time, invoiceNumber, subTotal, file
         },
         console.log(products, paidBy, service,
           name, phone, preparedBy, subTotal,
-          vat, invoiceNumber, total, file
+          vat, invoiceNumber, total,
         ))
       }catch(error){
         toast.error(getError(error))
       }
       const result = await easyinvoice.createInvoice(data)
       easyinvoice.render('pdf', result.pdf)
-      easyinvoice.download('myIvoice.pdf', result.pdf)  
+      easyinvoice.download(`${data.information.number}.pdf`, result.pdf)  
   }
 
 
@@ -198,9 +212,10 @@ const data ={
       <Form.Label>Customer Name:</Form.Label>
       <Form.Control
       type='text'
+      value={name || ''}
       name='customerName'
       placeholder='customer name'
-      onChange={handleSelectedValue(setCustomerName)}
+      onChange={(e)=> setCustomerName(e.target.value)}
       />
     </Col>
     <Col sm={2}>
@@ -208,13 +223,14 @@ const data ={
     <Form.Control
       required
       type='text'
-      name='telephone'
+      name='phone'
+      value={phone || ''}
       placeholder='customer number'
-      onChange={handleSelectedValue(setPhoneNumber)}
+      onChange={(e)=> setPhoneNumber(e.target.value)}
       />
     </Col>
     </Row>
-      <Table striped bordered hover>
+      <Table striped bordered hover responsive>
         <thead>
           <tr>
             <th>Product Name</th>
@@ -295,11 +311,16 @@ const data ={
       <Button variant='dark' onClick={handleAddRow} className='m-2'>
       <BsPlusSquare/><span className='mx-2'>Add</span>
     </Button>
-      </Col>
+    </Col>
       <Col md={4}>
+      {products.length > 0 ? (
       <Button variant='dark' onClick={handleSave} className='m-2'>
       <BsBoxArrowDown/><span className='mx-2'>save</span>
+    </Button>) : (
+      <Button variant='dark' disabled className='m-2'>
+      <BsBoxArrowDown/><span className='mx-2'>save</span>
     </Button>
+    )}
       </Col>
       <Col md={4}>
       <Button variant='dark' onClick={handleReset} className='m-2'>
@@ -307,7 +328,7 @@ const data ={
       </Button>
       </Col>
     </Row>
-      <Form.Group>
+      <Form.Group className='w-25'>
         <Form.Label>VAT (%)</Form.Label>
         <Form.Control
           type="number"

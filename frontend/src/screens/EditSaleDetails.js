@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useReducer, useContext} from 'react'
 import {useParams} from 'react-router-dom'
-import { Card, Row, Container, Form, Stack, Table, Button } from 'react-bootstrap'
+import { Card, Container, Form, Stack, Table, Button, Col } from 'react-bootstrap'
 import {FaPlusCircle, FaRedo} from 'react-icons/fa'
 import axios from 'axios'
 import {toast} from 'react-toastify'
@@ -117,6 +117,16 @@ const handleNewTable = () => {
 };
 //send updated data to backend
 const handleSave= async()=> {
+  if(arrangement === ''){
+    toast.error('Please Add arrangemet')
+    return
+  }
+  const hasNullValues = selectedProducts.some(row => Object.values(row).some(value => value === ''))
+  if(hasNullValues){
+    toast.error('cant record empty fields')
+    return
+  }
+
  try{
   const {data} = await axios.post(`/api/multiple/${saleId}/add-units`, {
     selectedProducts, arrangement
@@ -129,22 +139,22 @@ console.log(selectedProducts, arrangement)
 }
 
   return (
-    <Container>
-        <Row>
-          <Stack direction='horizontal' gap={3}>
-                <Card className='w-50'>
-                    <Card.Title className='m-2'>code:{' '}{sale.InvoiceCode}</Card.Title>
+<Container>
+        <Stack direction='vertical' gap={2}>
+              <Col md={3}>
+                  <Card.Title className='m-2'>code:{' '}{sale.InvoiceCode}</Card.Title>
                     <Form.Control type='text'
                     onChange={(e)=> setArrangement(e.target.value)}
                     name='arrangement'
                     placeholder='add arrangement'
                     />
-                </Card>
-                <Button onClick={handleAddRow}>
-                    <FaPlusCircle/>
+              </Col>
+                <Button onClick={handleAddRow} className='w-25'>
+                  <FaPlusCircle/> Add row
                 </Button>
-            <Table striped bordered hover className='mt-4'>
-            <thead>
+          <Col md={6}>
+          <Table striped bordered hover className='mt-4'>
+                <thead>
                 <tr>
                     <th>product</th>
                     <th>quantity</th>
@@ -174,12 +184,15 @@ console.log(selectedProducts, arrangement)
                 ))}
             </tbody>
           </Table>
+          </Col>
+
+          <Col md={3} className='d-flex justify-content-between'>
           <Button onClick={handleSave}>Record</Button>
           <Button onClick={handleNewTable}>
             <FaRedo/>
           </Button>
-          </Stack>
-        </Row>  
-    </Container>
+          </Col>
+        </Stack>
+</Container>
   )
 }

@@ -1,5 +1,5 @@
 import React, {useEffect, useReducer, useState} from 'react'
-import {Card, Col, Container, ListGroup, Row, Form} from 'react-bootstrap'
+import {Card, Col, Container, ListGroup, Row, Form, Alert} from 'react-bootstrap'
 import axios from 'axios'
 import { getError } from '../utils/getError'
 import { toast } from 'react-toastify'
@@ -75,6 +75,7 @@ export default function SaleHistoryScreen() {
   
     const filteredSale = sales.filter((x)=> x.InvoiceCode.toLowerCase().includes(searchCode.toLocaleLowerCase()))
     const filteredPhone = sales.filter((x)=> x.phone.toLowerCase().includes(searchPhone.toLocaleLowerCase()))
+   
     //const filteredName = sales.filter((x)=> x.name.toLowerCase().includes(searchPrice.toLocaleLowerCase()))
     //const filteredPrice = searchPrice
 
@@ -97,25 +98,28 @@ export default function SaleHistoryScreen() {
                     placeholder="search by code"
                     onChange={handleSearch(setSearchCode)}
                 />
-                {
-                filteredSale.length === 0 ? (
-                    <p>search...</p>
-                ):(
-                    <ListGroup className='pt-2'>
-                        {filteredSale.map((sale)=> (
-                             <ListGroup.Item key={sale._id} className='d-flex justify-content-between'>
-                             <Link to={`/edit-sale/${sale._id}`}>
-                                 {sale.InvoiceCode}
-                             </Link>
-                             / {sale.date}
-                             <span>
-                                <button onClick={()=>handleViewSale(sale._id)}>view</button>
-                             </span>
-                         </ListGroup.Item>
-                        ))}
-                    </ListGroup>
-                )
-                }
+                {searchCode === '' ? (
+                     <div className='mt-2'>
+                     <Alert variant='primary'>...Search By Invoice Number</Alert>
+                  </div>
+                   
+                ) : (
+
+                <ListGroup className='pt-2'>
+                    {filteredSale.map((sale)=> (
+                         <ListGroup.Item key={sale._id} className='d-flex justify-content-between'>
+                         <Link to={`/edit-sale/${sale._id}`}>
+                            {sale.InvoiceCode}
+                         </Link>
+                            Date: {sale.date}
+                         <span>
+                            <button onClick={()=>handleViewSale(sale._id)}>view</button>
+                         </span>
+                     </ListGroup.Item>
+                    ))}
+                </ListGroup>
+                )}
+
             </Col>
             <Col>
                 <Form.Control
@@ -123,22 +127,26 @@ export default function SaleHistoryScreen() {
                     placeholder="search by phone"
                     onChange={handleSearch(setSearchphone)}
                 />
-                {filteredPhone ? (
+                {searchPhone === '' ? (
+                    <div variant='primary' className='mt-2'>
+                        <Alert>...Search By Phone</Alert>
+                    </div>
+                    
+                ):(
                     <ListGroup className='pt-2'>
-                        {filteredPhone?.map((sale)=>(
+                        {filteredPhone.map((sale)=>(
                             <ListGroup.Item key={sale._id} className='d-flex justify-content-between'>
+                                code:
                                 <Link to={`/edit-sale/${sale._id}`}>
                                     {sale.InvoiceCode}
                                 </Link>
-                                / {sale.phone}
-                                <span>
-                                <button onClick={()=>handleViewSale(sale._id)} >view</button>
+                                Tel: {sale.phone}
+                            <span onClick={()=>handleViewSale(sale._id)} className="badge bg-dark p-2 m-2">
+                                view
                              </span>
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
-                ):(
-                    <p>....search</p>
                 )}
             </Col>
             <Col>
@@ -147,9 +155,13 @@ export default function SaleHistoryScreen() {
                    <h4>
                    Sale Details
                    </h4>
-                    <span className="badge bg-dark p-2 m-2">
-                        success
+                    {selectedSale && selectedSale.InvoiceCode ? (
+                    <span className="badge bg-success p-2 m-2">
+                        Processed successfully 
                     </span>
+                    ): (
+                        <Alert variant='danger'>Invoice Number Not Found</Alert>
+                    )}
                 </Card.Header>
                 <Card.Body>
                     {selectedSale && (
@@ -206,45 +218,6 @@ export default function SaleHistoryScreen() {
             </Card>
             </Col>
         </Row>
-{/*         {sales?.map((sale)=> (
-            <Row key={sale._id} className='d-flex justify-content-between align-items-center'>
-                <Col className='p-3'  md={2} sm={12} >
-                    {sale.saleItems.map((item)=>(
-                        <Card key={item._id}>
-                            <span className="badge bg-dark p-2 m-2">
-                                success
-                            </span>
-                        <Card.Title className='align-self-center'>{item.productName}</Card.Title>
-                        <Card.Body>
-                            <ListGroup>
-                                <ListGroup.Item>
-                                   price: {item.price}
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                   quantity: {item.quantity}
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                  arrangement:  {item.arrangement}
-                                </ListGroup.Item>
-                                <ListGroup.Item>
-                                  subtotal:  {sale.subTotal}
-                                </ListGroup.Item>
-                            </ListGroup>
-                        </Card.Body>
-                        </Card>
-                    ))}
-                </Col>
-                <Col sm={8} md={2}>Invoice Code: <Link to={`/edit-sale/${sale._id}`}>{sale.InvoiceCode}</Link>
-                </Col>
-                <Col sm={6} md={2}>prepapredBy: {sale.preparedBy}</Col>
-                <Col sm={6} md={2}>PaidBy: {sale.paidBy}</Col>
-                <Col sm={6} md={2}>Service: {sale.service}</Col>
-                <Col sm={6} md={2}>Date: {sale.createdAt.substring(0, 10)}</Col>
-                <Col sm={6} md={2}>
-                </Col>
-            </Row>
-            
-        ))} */}
       
     <div>
         {[...Array(pages).keys()].map((x)=>(
