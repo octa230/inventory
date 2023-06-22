@@ -133,7 +133,7 @@ export default function InventoryScreen() {
             value={searchName}
             onChange={handleSearch}
         />
-    <Table striped bordered hover className='my-2 w-100'>
+    <Table striped bordered hover className='my-2 w-100' responsive>
         <thead>
             <tr>
                 <th>ID</th>

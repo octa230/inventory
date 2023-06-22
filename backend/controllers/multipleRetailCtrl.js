@@ -77,4 +77,5 @@ const addSaleUnits = asyncHandler(asyncHandler(async(req, res)=> {
     sale.units.push({arrangement, ...newProducts})
 }))
 
+
 module.exports = {getSales, getsingleSale, addSaleUnits, makeSale}
