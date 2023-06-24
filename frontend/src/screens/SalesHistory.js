@@ -1,8 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react'
-import { Store } from '../utils/Store'
-import { useNavigate, useParams } from 'react-router'
-import MyDocument from '../components/Document'
-import ReactPDF from '@react-pdf/renderer'
+import React, {useEffect, useReducer } from 'react'
 import axios from 'axios'
 import { getError } from '../utils/getError'
 import { Button, ListGroup } from 'react-bootstrap'
@@ -33,26 +29,18 @@ function reducer (state, action){
 
 export default function SalesHistory() {
 
-    
-    const {state} = useContext(Store);
-    const {userInfoToken} = state;
-    const navigate = useNavigate();
-
-
-    const [{sale, loading, error, sales }, dispatch]= useReducer(reducer, {
+    const [{sales }, dispatch]= useReducer(reducer, {
         loading: true,
         error: '',
         sales:[]
     })
 
-
-
     useEffect(()=> {
         const fetchData = async()=> {
             dispatch({type: 'FETCH_REQUEST'});
             try{
-                const {data} = await axios.get('/api/sales/list') 
-                dispatch({type: 'FETCH_SUCCESS', payload: data})
+            await axios.get('/api/sales/list') 
+            dispatch({type: 'FETCH_SUCCESS'})
             
             }catch(error){
                 dispatch({type: 'FETCH_FAIL', payload: getError(error)})

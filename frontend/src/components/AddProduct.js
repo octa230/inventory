@@ -1,8 +1,6 @@
-import React, {useState, useReducer, useEffect} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
+import React, {useState, useReducer} from 'react'
 import { Button, Form } from 'react-bootstrap'
 import axios from 'axios'
-import { productReducer } from '../utils/Store'
 import {toast} from 'react-toastify'
 import {getError} from '../utils/getError'
 
@@ -17,7 +15,7 @@ const reducer = (state, action) => {
       case 'UPDATE_FAIL':
         return { ...state, loadingUpdate: false };
       case 'P_CREATE_REQUEST':
-          return { ...state, loadingCreate: true };
+          return { ...state, loadingCreate: true};
       case 'P_CREATE_SUCCESS':
           return { ...state, loadingCreate: false };
       case 'P_CREATE_FAIL':
@@ -30,11 +28,7 @@ const reducer = (state, action) => {
 
 export default function AddProduct() {
 
-    const navigate = useNavigate();
-    const params = useParams(); // /product/:id
-    const { id: productId } = params;
-
-    const [{ loading, error, loadingUpdate, loadingCreate}, dispatch] =
+    const [{loading}, dispatch] =
     useReducer(reducer, {
       loading: true,
       loadingCreate: true,
@@ -52,7 +46,7 @@ export default function AddProduct() {
     const createHandler = async()=> {
         try{
             dispatch({type: 'P_CREATE_REQUEST'})
-            const {data} =  await axios.post('/api/product/new',{
+            await axios.post('/api/product/new',{
                 name,
                 code,
                 price,

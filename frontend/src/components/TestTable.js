@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Table, Form, Button, Col, Row, Container } from 'react-bootstrap';
+import Table from 'react-bootstrap/Table';
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Container from 'react-bootstrap/Container';
 import axios from 'axios'
 import {getError} from '../utils/getError'
 import easyinvoice from 'easyinvoice'

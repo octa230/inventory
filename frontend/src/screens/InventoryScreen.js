@@ -52,7 +52,7 @@ export default function InventoryScreen() {
     const sp = new URLSearchParams(search);
     const page = sp.get('page') || 1
 
-  const [{loading, loadingDelete, successDelete, error, products, pages, loadingUpdate}, dispatch]= useReducer(reducer, {
+  const [{successDelete, error, products, pages}, dispatch]= useReducer(reducer, {
     loading: true,
     products:[],
     error: ''
@@ -63,7 +63,6 @@ export default function InventoryScreen() {
   const [price, setPrice] = useState()
   const [inStock, setInStock] = useState(0)
   const [searchName, setSearchName] = useState('')
-  const [searchPrice, setSearchPrice ] = useState(0)
 
 
 

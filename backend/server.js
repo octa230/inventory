@@ -2,8 +2,6 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
-const asyncHandler = require('express-async-handler')
-const cors = require('cors');
 const ErrorHandler = require('./midleware/errHandler')
 const cookieParser = require('cookie-parser');
 const userRouter = require('./routes/userRouter')
@@ -46,6 +44,7 @@ app.get('*', (req, res)=>
     res.sendFile(path.join(`${__dirname}, '/../frontend/build/index.html`))
 )  */
 
+//serve frontend
 if(process.env.NODE_ENV === 'production'){
     app.use(express.static(path.join(__dirname, '../frontend/build')));
     app.get('*', (req, res)=> res.sendFile(

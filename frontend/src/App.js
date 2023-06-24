@@ -8,11 +8,11 @@ import ProductEdit from "./screens/ProductEdit";
 import SalesHistory from "./screens/SalesHistory";
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
-import { Nav, Navbar } from "react-bootstrap";
+import Nav from "react-bootstrap/Nav";
+import Navbar from 'react-bootstrap/Navbar'
 import RetailScreen from "./screens/RetailScreen";
 import {BsBoxArrowRight, BsFillDatabaseFill, BsFillClipboard2DataFill, BsFillPersonPlusFill, BsGrid1X2Fill} from 'react-icons/bs'
 import { useContext } from "react";
-import {RiFileList2Fill, RiFolderHistoryFill} from "react-icons/ri"
 import { Store } from "./utils/Store";
 import EditSaleDetails from "./screens/EditSaleDetails";
 import SaleHistoryScreen from "./screens/SaleHistoryScreen"
@@ -22,7 +22,9 @@ import PrintStock from "./screens/PrintStock";
 function App() {
 
   const {state, dispatch: ctxDispatch} = useContext(Store);
-  const { sale, userTokenInfo } = state;
+  const {userInfoToken } = state;
+  
+  
   function signoutHandler(){
 
     ctxDispatch({type: 'SIGN_OUT'})
@@ -32,7 +34,9 @@ function App() {
   return (
   <BrowserRouter>
   <Navbar expand='lg' bg="dark" variant="dark" color="black" className="p-4" > 
-      <Navbar.Brand href="/">Home</Navbar.Brand>
+      <Navbar.Brand href="/">
+        <span className="border p-2">Active as: {userInfoToken.name}</span>
+      </Navbar.Brand>
         <Navbar.Toggle aria-controls="nav-bar-basic"/>
         <Navbar.Collapse id="nav-bar-basic">
         <Nav className="m-auto justify-content-center fs-5">

@@ -1,5 +1,11 @@
 import React, {useEffect, useReducer, useState} from 'react'
-import {Card, Col, Container, ListGroup, Row, Form, Alert} from 'react-bootstrap'
+import Card from 'react-bootstrap/Card'
+import Col from 'react-bootstrap/Col'
+import Alert from 'react-bootstrap/Alert'
+import Container from 'react-bootstrap/Container'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Row from 'react-bootstrap/Row'
+import Form from 'react-bootstrap/Form'
 import axios from 'axios'
 import { getError } from '../utils/getError'
 import { toast } from 'react-toastify'
@@ -42,10 +48,8 @@ export default function SaleHistoryScreen() {
     })
 
     const [searchCode, setSearchCode] = useState('')
-    const [searchPrice, setSearchPrice] = useState([])
     const [searchPhone, setSearchphone] = useState('')
     const [selectedSale, setSelectedSale] = useState()
-    const [viewMore, setViewMore] = useState(false)
 
     const {search} = useLocation()
     const sp = new URLSearchParams(search);
