@@ -35,7 +35,7 @@ function App() {
   <BrowserRouter>
   <Navbar expand='lg' bg="dark" variant="dark" color="black" className="p-4" > 
       <Navbar.Brand href="/">
-        <span className="border p-2">Active as: {userInfoToken.name}</span>
+        <span className="border p-2">Active as: {userInfoToken? userInfoToken.name: 'Home'}</span>
       </Navbar.Brand>
         <Navbar.Toggle aria-controls="nav-bar-basic"/>
         <Navbar.Collapse id="nav-bar-basic">
